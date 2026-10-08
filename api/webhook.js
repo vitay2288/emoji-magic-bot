@@ -59,11 +59,21 @@ module.exports = async (req, res) => {
       if (userPhotos[chatId] && text.length < 50) {
         const buffer = userPhotos[chatId];
 
+        // Экранируем текст
+        const safeText = text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&apos;');
+
+        // SVG с текстом. Используем крупный шрифт и толстую обводку.
         const svgText = `
-          <svg width="512" height="512">
-            <text x="256" y="480" font-family="Arial, sans-serif" font-size="42" 
-                  font-weight="bold" fill="white" stroke="black" stroke-width="4" 
-                  text-anchor="middle">${escapeXml(text)}</text>
+          <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+            <text x="256" y="470" font-family="Arial, Helvetica, sans-serif" 
+                  font-size="48" font-weight="900" fill="#FFFFFF" 
+                  stroke="#000000" stroke-width="6" paint-order="stroke"
+                  text-anchor="middle">${safeText}</text>
           </svg>
         `;
 
@@ -90,15 +100,3 @@ module.exports = async (req, res) => {
     res.status(200).send('OK');
   }
 };
-
-function escapeXml(unsafe) {
-  return unsafe.replace(/[<>&'"]/g, (c) => {
-    switch (c) {
-      case '<': return '&lt;';
-      case '>': return '&gt;';
-      case '&': return '&amp;';
-      case '\'': return '&apos;';
-      case '"': return '&quot;';
-    }
-  });
-}
