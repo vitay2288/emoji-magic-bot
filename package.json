@@ -1,0 +1,16 @@
+{
+  "name": "emoji-magic-bot",
+  "version": "1.0.0",
+  "description": "Bot for making stickers from photos",
+  "main": "api/webhook.js",
+  "scripts": {
+    "start": "node api/webhook.js"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.66.0",
+    "sharp": "^0.33.5"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}
